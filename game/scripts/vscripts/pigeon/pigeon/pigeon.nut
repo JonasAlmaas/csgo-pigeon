@@ -24,11 +24,13 @@ animation <- {
 
         MIN_ESCAPE_DISTANCE = 250.0,
         MAX_ESCAPE_DISTANCE = 550.0,
-        
+
         MIN_IDLE_TIME = 5.0,
         MAX_IDLE_TIME = 25.0,
 
         FLIGHT_DURATION_FACTOR = 0.002,
+
+        IGNORE_COLLITION_DISTANCE = 16.0,
 
         _escape_distance = 0,
         _idle_time = 0,
@@ -151,7 +153,7 @@ animation <- {
             update_random_variables();
 
             _is_escaping = true;
-            
+
             _active_target.is_used = false;
 
             _ecape_start_pos = _active_target.pos;
@@ -189,8 +191,21 @@ animation <- {
             while (loops < flight_target_count) {
                 local index = RandomInt(0, flight_target_count - 1);
                 if (!_flight_targets[index].is_used) {
-                    local trace_distance = TraceLine(_active_target.pos, _flight_targets[index].pos, null);
+                    local trace_length = (_active_target.pos - _flight_targets[index].pos).Length();
+                    local clear_persent = IGNORE_COLLITION_DISTANCE / trace_length;
+
+                    local trace_start = math.vec_lerp(_active_target.pos, _flight_targets[index].pos, clear_persent);
+                    local trace_end = math.vec_lerp(_active_target.pos, _flight_targets[index].pos, 1 - clear_persent);
+
+                    local trace_distance = TraceLine(trace_start, trace_end, null);
+
                     if (trace_distance == 1) {
+                        if (IS_DEBUGGING) {
+                            debug_draw.line(trace_start, trace_end, [0,255,0], true, 5);
+                            debug_draw.line(_active_target.pos, trace_start, [255,0,0], true, 5);
+                            debug_draw.line(_flight_targets[index].pos, trace_end, [255,0,0], true, 5);
+                        }
+
                         return _flight_targets[index];
                     }
                 }
