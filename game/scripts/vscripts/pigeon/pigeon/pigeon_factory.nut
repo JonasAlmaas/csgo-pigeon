@@ -22,9 +22,9 @@
                 local flight_target_count = flight_targets.len();
 
                 local loops = 0;
-                while (loops < flight_target_count) {
+                while (loops < flight_target_count * 2) {
                     local index = RandomInt(0, flight_target_count - 1);
-                
+
                     if (!flight_targets[index].is_used) {
                         flight_targets[index].is_used = true;
                         pigeons.append(new_pigeon(flight_targets[index], flight_targets));
