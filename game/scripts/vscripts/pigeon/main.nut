@@ -17,9 +17,9 @@
 ]
 
 ::SCRIPTS_MANIFEST_PIGEON <- [
+    "pigeon/flight_target",
     "pigeon/pigeon_factory",
     "pigeon/pigeon",
-    "pigeon/utils",
 ]
 
 ::include_scripts <- function() {
@@ -46,7 +46,7 @@ include_scripts();
     calculate_tickrate();
 
     if (!initialized) {
-
+        
         pigeon_factory = new_pigeon_factory();
 
         initialized = true;
