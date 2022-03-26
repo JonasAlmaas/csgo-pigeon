@@ -1,5 +1,3 @@
-// TODO
-// Add line trace offset at start and end
 
 animation <- {
     idle = "Idle01",
